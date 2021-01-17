@@ -12,8 +12,6 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
 
-
-
 # time stamp day-hour-minuts-second when running this function
 def get_time_stamp():
     return time.strftime('%d-%H-%M-%S', time.localtime(time.time()))
@@ -101,7 +99,7 @@ def train_model(model, epoch, data, loss='mse', optimizer='rmsprop', saved_model
 def pred_and_evaluate(model, x, y, test_size):
     train_size = len(y) - test_size
     pred = model.predict(x)
-    y = y[:, np.newaxis]
+    y = y[:, np.newaxis] if len(y.shape) == 1 else y
     mse = tf.keras.losses.MeanSquaredError()
     total_error, train_error, test_error = mse(y, pred).numpy(), mse(y[:train_size], pred[:train_size]).numpy(), \
                                            mse(y[train_size:], pred[train_size:]).numpy()
@@ -149,6 +147,10 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
         model_folders.remove("PredictedvsActual")
     if not os.path.exists(os.path.join(saved_model_base_path, "PredictedvsActual")):
         os.makedirs(os.path.join(saved_model_base_path, "PredictedvsActual"))
+    if "PredictedvsActualCSV" in model_folders:
+        model_folders.remove("PredictedvsActualCSV")
+    if not os.path.exists(os.path.join(saved_model_base_path, "PredictedvsActualCSV")):
+        os.makedirs(os.path.join(saved_model_base_path, "PredictedvsActualCSV"))
     loss_evaluate = pd.DataFrame()
     for model_name in model_folders:
         for r_index, running_time in enumerate(os.listdir(os.path.join(saved_model_base_path, model_name)), 1):
@@ -164,10 +166,14 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 for m_index, model_selected in enumerate(models_list):
                     model = load_check_point(os.path.join(base_path, "saved_checkpoints", model_selected))
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
+                    ly = y[:, 0] if len(y.shape) > 1 else y
+                    pd.DataFrame({"Predicted": pred, "Actual": ly}).to_csv(
+                        os.path.join(saved_model_base_path, "PredictedvsActual",
+                                     f"{model.name}_{r_index}_{m_index}_pred.csv"))
                     pred_and_actual_plot = plot_predicted(f"{model.name}_{r_index}_{m_index}", pred, y,
                                                           test_size=test_size, show=show,
                                                           text=f"MSE:{total_error:.4f} Val_mse:{test_error:.4f}")
-                    pred_and_actual_plot.savefig(os.path.join(saved_model_base_path, "PredictedvsActual",
+                    pred_and_actual_plot.savefig(os.path.join(saved_model_base_path, "PredictedvsActualCSV",
                                                               f"{model.name}_{r_index}_{m_index}_value.png"))
                     pred_and_actual_plot.close()
                     df = pd.DataFrame({
