@@ -6,3 +6,5 @@ dev*
 backup*
 loss_evaluate.csv
 Report.md
+.idea/
+*.xml

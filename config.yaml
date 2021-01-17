@@ -21,7 +21,7 @@ IGRA_PATH: ../Training_data/IGRA Archieves
 DMI_PATH: ../Training_data/DMI_data
 REANALYSIS_PATH: ../Training_data/Ocean_salinity_reanalysis
 SST_PATH: ../Training_data/OceanSurface_observed
-GPCP_PATH: ../Training_data/GPCP_precipitation./precip_data_glaciers
+GPCP_PATH: ../Training_data/GPCP_precipitation/precip_data_glaciers
 
 centroid_map:
   1: DANMARKSHAVN
