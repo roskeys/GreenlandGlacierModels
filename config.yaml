@@ -1,0 +1,45 @@
+train: true
+plot_all: true
+generate_report: true
+epoch: 2500
+loss: mse
+show: false
+metrics: null
+optimizer: rmsprop
+save_best_only: true
+newPrecipitation: false
+ocean: reanalysis
+#ocean: ocean
+#ocean: null
+models: all
+verbose: 1
+saved_model_path: saved_models
+combine: false
+GLACIER_ASSIGNMENT_PATH: ../Training_data/Glaicer_select.csv
+SMB_PATH: ../Training_data/smb_mass_change.csv
+IGRA_PATH: ../Training_data/IGRA Archieves
+DMI_PATH: ../Training_data/DMI_data
+REANALYSIS_PATH: ../Training_data/Ocean_salinity_reanalysis
+SST_PATH: ../Training_data/OceanSurface_observed
+GPCP_PATH: ../Training_data/GPCP_precipitation./precip_data_glaciers
+
+centroid_map:
+  1: DANMARKSHAVN
+  2: ITTOQQORTOORMIIT
+  3: TASIILAQ(AMMASSALIK)
+  4: MITTARFIK_NARSARSUAQ
+  5: AASIAAT(EGEDESMINDE)
+
+glaciers:
+  - JAKOBSHAVN_ISBRAE
+  - ICE_CAPS_SW
+  - SERMEQ_KUJALLEQ
+  - QAJUUTTAP_SERMIA
+  - SERMILIGAARSSUK_BRAE
+  - BUSSEMAND
+  - ICE_CAPS_CE
+  - HELHEIMGLETSCHER
+  - GEIKIE3
+  - DENDRITGLETSCHER
+  - AB_DRACHMANN_GLETSCHER_L_BISTRUP_BRAE
+  - STORSTROMMEN
