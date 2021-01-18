@@ -15,13 +15,19 @@ from utils.utils import train_model, load_all_and_plot_all, concatenate_data
 from utils.data import load_data, get_centroid, train_test_split, determine_path
 
 sys.path.insert(0, "models")
-formatter = logging.Formatter('%(asctime)15s %(levelname)5s: %(message)s')
-logger = logging.getLogger(f"logs/GlacierModel-{time.strftime('%d-%H-%M-%S', time.localtime(time.time()))}.log")
+logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-logger.addHandler(ch)
-ch.setFormatter(formatter)
+formatter = logging.Formatter('%(asctime)15s %(levelname)5s: %(message)s')
+
+stream = logging.StreamHandler()
+stream.setLevel(logging.INFO)
+stream.setFormatter(formatter)
+logger.addHandler(stream)
+
+handler = logging.FileHandler(f"logs/GlacierModel.log")
+handler.setLevel(logging.INFO)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 if os.name == "posix":
     default_config_path = "config.yaml"
