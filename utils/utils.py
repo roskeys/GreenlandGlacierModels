@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from sklearn.metrics import r2_score
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -71,9 +72,10 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
             filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}-{val_loss:.2f}.hdf5"),
             monitor='val_loss', mode='auto', save_freq='epoch', save_best_only=save_best_only),
         EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
-                      baseline=0.3)
+                      baseline=0.15)
     ], epochs=epoch, verbose=verbose)
-    model.save(os.path.join(model_path, "saved_checkpoints", f"weights-{epoch:03d}.hdf5"))
+
+    model.save(os.path.join(model_path, "saved_checkpoints", "weights.hdf5"))
     # plot the history
     history_plot = plot_history(history.history, show=show)
     history_plot.savefig(os.path.join(model_path, f"{model_name}.loss.png"))
@@ -165,6 +167,8 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
                     if len(y.shape) > 1:
                         y = y.squeeze(-1)
+                    diff = pred - y
+                    train_diff, test_diff = diff[:-test_size], diff[-test_size:]
                     pd.DataFrame({"Predicted": pred, "Actual": y}).to_csv(
                         os.path.join(saved_model_base_path, "PredictedvsActualCSV",
                                      f"{model.name}_{r_index}_{m_index}_pred.csv"))
@@ -177,6 +181,9 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                     df = pd.DataFrame({
                         "name": [f"{model.name}_{r_index}_{m_index}"],
                         "Total_loss": [total_error], "Test_loss": [test_error], "Training_loss": [train_error],
+                        "r2_score": [r2_score(diff, np.zeros(len(diff)))],
+                        "Test_r2": [r2_score(test_diff, np.zeros(test_size))],
+                        "Training_r2": [r2_score(train_diff, np.zeros(len(diff) - test_size))],
                         "path": [os.path.join(base_path, "saved_checkpoints", model_selected)]
                     })
                     loss_evaluate = pd.concat([loss_evaluate, df], ignore_index=True)

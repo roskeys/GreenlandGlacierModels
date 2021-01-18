@@ -1,7 +1,6 @@
 import os
 import re
 import sys
-import time
 import yaml
 import logging
 import argparse

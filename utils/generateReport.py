@@ -24,7 +24,7 @@ def generate_report_md(loss_evaluate_path, image_path, top_n=5):
 def get_best_of_each_model(dataframe):
     max_df = pd.DataFrame()
     for name in dataframe["name"].str.split("_", expand=True)[0].unique().tolist():
-        df = dataframe[dataframe["name"].str.contains(name)]
+        df = dataframe[dataframe["name"].str.contains(name)].sort_values("Test_loss", ascending=True)
         max_df = pd.concat([max_df, df.head(1)])
     return max_df
 
@@ -94,4 +94,4 @@ def statistics_for_each_model(dataframe):
 
 
 if __name__ == '__main__':
-    generate_report_md("../loss_evaluate.csv", "../saved_models/PredictedvsActual", top_n=2)
+    generate_report_md("../loss_evaluate.csv", "../saved_models/PredictedvsActual", top_n=5)
