@@ -167,12 +167,12 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
                     ly = y[:, 0] if len(y.shape) > 1 else y
                     pd.DataFrame({"Predicted": pred, "Actual": ly}).to_csv(
-                        os.path.join(saved_model_base_path, "PredictedvsActual",
+                        os.path.join(saved_model_base_path, "PredictedvsActualCSV",
                                      f"{model.name}_{r_index}_{m_index}_pred.csv"))
                     pred_and_actual_plot = plot_predicted(f"{model.name}_{r_index}_{m_index}", pred, y,
                                                           test_size=test_size, show=show,
                                                           text=f"MSE:{total_error:.4f} Val_mse:{test_error:.4f}")
-                    pred_and_actual_plot.savefig(os.path.join(saved_model_base_path, "PredictedvsActualCSV",
+                    pred_and_actual_plot.savefig(os.path.join(saved_model_base_path, "PredictedvsActual",
                                                               f"{model.name}_{r_index}_{m_index}_value.png"))
                     pred_and_actual_plot.close()
                     df = pd.DataFrame({
