@@ -1,30 +1,72 @@
+## Train models or not
 train: true
+## Plot all saved models or not
 plot_all: true
+## Automatically generate markdown report
 generate_report: true
+## training epoch
 epoch: 2500
+## Training loss function
 loss: mse
+## Show plots before saving
 show: false
+## evaluation matrix
 metrics: null
+## Training optimizer
 optimizer: rmsprop
+## Save the current best models
 save_best_only: true
-newPrecipitation: false
-ocean: reanalysis
-#ocean: ocean
-#ocean: null
+## Train all the models in the models directory or only listed models
 models: all
+## show training process or not
 verbose: 1
+## where to save the saved_models
 saved_model_path: saved_models
+## combine the training data together to train instead of data of single glacier
 combine: false
+## Early stopping minimum delta
 min_delta: 0.5
+## Early stopping waiting epoches
 patience: 200
+
+## Data paths
 GLACIER_ASSIGNMENT_PATH: ../Training_data/Glaicer_select.csv
 SMB_PATH: ../Training_data/smb_mass_change.csv
-IGRA_PATH: ../Training_data/IGRA Archieves
-DMI_PATH: ../Training_data/DMI_data
-REANALYSIS_PATH: ../Training_data/Ocean_salinity_reanalysis
-SST_PATH: ../Training_data/OceanSurface_observed
-GPCP_PATH: ../Training_data/GPCP_precipitation/precip_data_glaciers
 
+#################### ocean/reanalysis data path ####################
+## reanalysis data
+ocean_PATH: ../Training_data/Ocean_salinity_reanalysis
+## Ocean surface data
+#ocean_PATH: ../Training_data/OceanSurface_observed
+
+#################### precipitation data path ####################
+## precip_data_glaciers
+#precipitation_PATH: ../Training_data/GPCP_precipitation/precip_data_glaciers
+## GPCP_precipitation
+precipitation_PATH: ../Training_data/GPCP_precipitation/
+## DMI data
+#precipitation_PATH: ../Training_data/DMI_data
+
+#################### cloud data path ####################
+## DMI cloud data path
+cloud_PATH: ../Training_data/DMI_data/
+
+#################### wind data path ####################
+wind_PATH: ../Training_data/DMI_data/
+
+#################### humidity data path ####################
+## IGRA humidity data path
+humidity_PATH: ../Training_data/IGRA Archieves
+
+#################### pressure data path ####################
+## IGRA pressure data path
+pressure_PATH: ../Training_data/IGRA Archieves
+
+#################### temperature data path ####################
+## IGRA temperature data path
+temperature_PATH: ../Training_data/IGRA Archieves
+
+## Centroid assignment map
 centroid_map:
   1: DANMARKSHAVN
   2: ITTOQQORTOORMIIT
@@ -32,6 +74,7 @@ centroid_map:
   4: MITTARFIK_NARSARSUAQ
   5: AASIAAT(EGEDESMINDE)
 
+## Glaciers selected to train
 glaciers:
   - JAKOBSHAVN_ISBRAE
   - ICE_CAPS_SW

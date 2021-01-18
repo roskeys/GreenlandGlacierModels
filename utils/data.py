@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from os.path import exists, join
 
 
 def get_year_range(dataframe):
@@ -186,3 +187,18 @@ def train_test_split(x, y, test_size=7, random_seed=None):
     y_train = y[:-test_size]
     y_test = y[-test_size:]
     return x_train, x_test, y_train, y_test
+
+
+def determine_path(variable_name, config, glacier_name, central):
+    if exists(join(config[f"{variable_name}_PATH"], f"{variable_name}_{glacier_name}.csv")):
+        return join(config[f"{variable_name}_PATH"], f"{variable_name}_{glacier_name}.csv")
+    elif exists(join(config[f"{variable_name}_PATH"], f"{variable_name}_{central}.csv")):
+        return join(config[f"{variable_name}_PATH"], f"{variable_name}_{central}.csv")
+    elif exists(join(config[f"{variable_name}_PATH"], str(central), f"{variable_name}_{central}.csv")):
+        return join(config[f"{variable_name}_PATH"], str(central), f"{variable_name}_{central}.csv")
+    elif exists(join(config[f"{variable_name}_PATH"], glacier_name, f"{variable_name}_{glacier_name}.csv")):
+        return join(config[f"{variable_name}_PATH"], glacier_name, f"{variable_name}_{glacier_name}.csv")
+    elif exists(join(config[f"{variable_name}_PATH"], config["centroid_map"][central], f"{variable_name}.csv")):
+        return join(config[f"{variable_name}_PATH"], config["centroid_map"][central], f"{variable_name}.csv")
+    else:
+        raise FileNotFoundError(f"{variable_name} data path not exists")

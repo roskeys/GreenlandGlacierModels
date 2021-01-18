@@ -3,8 +3,6 @@ import time
 import pickle
 import numpy as np
 import pandas as pd
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from tensorflow.keras.utils import plot_model
@@ -24,13 +22,14 @@ def load_check_point(path):
 
 
 # load the checkpoint and keep training from that model
-def transfer_learning(path, epoch, data, loss='mse', optimizer='rmsprop', save_best_only=True, metrics=None,
+def transfer_learning(path, epoch, data, config, loss='mse', optimizer='rmsprop', save_best_only=True, metrics=None,
                       show=False, name=""):
     model = load_check_point(path)
     model._name = "Trans_" + model.name
     if len(name) > 0:
         model._name += ("_" + name)
-    train_model(model, epoch, data, loss=loss, optimizer=optimizer, save_best_only=save_best_only, metrics=metrics,
+    train_model(model, epoch, data, config, loss=loss, optimizer=optimizer, save_best_only=save_best_only,
+                metrics=metrics,
                 show=show)
 
 
@@ -66,7 +65,6 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
         f"Compiled model: name: {model.name} epoch: {epoch} train size: {train_size} "
         f"test size: {test_size} optimizer: {optimizer}")
     # add keras callbacks save history, tensorboard record and checkpoints
-
     history = model.fit(x_train, y_train, validation_data=(x_test, y_test), callbacks=[
         # TensorBoard(log_dir=os.path.join(model_path, "logs"), update_freq="epoch"),
         ModelCheckpoint(
@@ -102,8 +100,8 @@ def pred_and_evaluate(model, x, y, test_size):
     pred = model.predict(x)
     y = y[:, np.newaxis] if len(y.shape) == 1 else y
     mse = tf.keras.losses.MeanSquaredError()
-    total_error, train_error, test_error = mse(y, pred).numpy(), mse(y[:train_size], pred[:train_size]).numpy(), \
-                                           mse(y[train_size:], pred[train_size:]).numpy()
+    total_error, train_error, test_error = mse(y, pred).numpy(), mse(y[:train_size], pred[:train_size]).numpy(), mse(
+        y[train_size:], pred[train_size:]).numpy()
     return pred[:, 0], total_error, train_error, test_error
 
 
