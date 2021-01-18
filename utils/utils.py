@@ -64,18 +64,16 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
     logger.info(
         f"Compiled model: name: {model.name} epoch: {epoch} train size: {train_size} "
         f"test size: {test_size} optimizer: {optimizer}")
-    logger.info(model.summary())
     # add keras callbacks save history, tensorboard record and checkpoints
     history = model.fit(x_train, y_train, validation_data=(x_test, y_test), callbacks=[
         # TensorBoard(log_dir=os.path.join(model_path, "logs"), update_freq="epoch"),
         ModelCheckpoint(
-            filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}-{val_loss:.2f}.hdf5"),
+            filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}.hdf5"),
             monitor='val_loss', mode='auto', save_freq='epoch', save_best_only=save_best_only),
-        EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
-                      baseline=0.15)
+        # EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
+        #               baseline=config["threshold"])
     ], epochs=epoch, verbose=verbose)
-
-    model.save(os.path.join(model_path, "saved_checkpoints", "weights.hdf5"))
+    model.save(os.path.join(model_path, "saved_checkpoints", f"weights-{epoch}.hdf5"))
     # plot the history
     history_plot = plot_history(history.history, show=show)
     history_plot.savefig(os.path.join(model_path, f"{model_name}.loss.png"))
@@ -163,6 +161,8 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 if last:
                     models_list = models_list[-1:]
                 for m_index, model_selected in enumerate(models_list):
+                    if int(model_selected[:-5].split('-')[-1]) < 100:
+                        continue
                     model = load_check_point(os.path.join(base_path, "saved_checkpoints", model_selected))
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
                     if len(y.shape) > 1:

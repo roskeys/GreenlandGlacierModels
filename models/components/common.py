@@ -38,6 +38,8 @@ def flattenAll(x_list):
 
 
 def concatenate_together(x_list, axis=1):
+    if len(x_list) == 0:
+        return
     shape = x_list[0].shape
     for i in x_list[1:]:
         if len(i.shape) != len(shape):

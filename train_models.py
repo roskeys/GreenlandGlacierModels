@@ -54,13 +54,14 @@ if config["models"][0] == "all":
 else:
     models = config["models"]
 
+if not os.path.exists(config["saved_model_path"]):
+    os.mkdir(config["saved_model_path"])
+
 first = True
 x_combine_train, x_combine_test, y_combine_train, y_combine_test = None, None, None, None
 
 if config["train"]:
     try:
-        if not os.path.exists(config["saved_model_path"]):
-            os.mkdir(config["saved_model_path"])
         for glacier_name in config['glaciers']:
             try:
                 central = get_centroid(glacier_name, glacier_assignment)
@@ -134,9 +135,9 @@ if config["train"]:
             for model_name in models:
                 try:
                     module = importlib.import_module(model_name)
-                    if "reanalysis" in config['ocean_PATH'] or "Reanalysis" in config['ocean_PATH']:
+                    if config['ocean_PATH'] and ("reanalysis" in config['ocean_PATH'] or "Reanalysis" in config['ocean_PATH']):
                         name = f"reanalysis.{model_name}"
-                    elif "Ocean" in config["ocean_PATH"]:
+                    elif config['ocean_PATH'] and "Ocean" in config["ocean_PATH"]:
                         name = f"ocean.{model_name}"
                     else:
                         name = f"basic.{model_name}"

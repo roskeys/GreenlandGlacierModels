@@ -118,7 +118,8 @@ def reset_column_name(dataframe):
 
 
 def _load_csv_data(path):
-    dataframe = pd.read_csv(path, index_col=0, dtype=np.float64)
+    dataframe = pd.read_csv(path, index_col=0)
+    dataframe = dataframe.select_dtypes(include=['float64'])
     dataframe = dataframe.apply(lambda x: x.fillna(x.mean()), axis=0)
     return reset_column_name(dataframe)
 
