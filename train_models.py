@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import yaml
+import time
 import logging
 import argparse
 import importlib
@@ -23,7 +24,7 @@ stream.setLevel(logging.INFO)
 stream.setFormatter(formatter)
 logger.addHandler(stream)
 
-handler = logging.FileHandler(f"logs/GlacierModel.log")
+handler = logging.FileHandler(f"logs/GlacierModel-{time.strftime('%d-%H-%M-%S', time.localtime(time.time()))}.log")
 handler.setLevel(logging.INFO)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
@@ -135,7 +136,8 @@ if config["train"]:
             for model_name in models:
                 try:
                     module = importlib.import_module(model_name)
-                    if config['ocean_PATH'] and ("reanalysis" in config['ocean_PATH'] or "Reanalysis" in config['ocean_PATH']):
+                    if config['ocean_PATH'] and (
+                            "reanalysis" in config['ocean_PATH'] or "Reanalysis" in config['ocean_PATH']):
                         name = f"reanalysis.{model_name}"
                     elif config['ocean_PATH'] and "Ocean" in config["ocean_PATH"]:
                         name = f"ocean.{model_name}"
