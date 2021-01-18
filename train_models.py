@@ -15,7 +15,7 @@ from utils.utils import train_model, load_all_and_plot_all, concatenate_data
 from utils.data import load_data, get_centroid, train_test_split, determine_path
 
 sys.path.insert(0, "models")
-formatter = logging.Formatter('train_model %(asctime)15s %(levelname)5s: %(message)s')
+formatter = logging.Formatter('%(asctime)15s %(levelname)5s: %(message)s')
 logger = logging.getLogger(f"logs/GlacierModel-{time.strftime('%d-%H-%M-%S', time.localtime(time.time()))}.log")
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()

@@ -71,7 +71,7 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
             filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}-{val_loss:.2f}.hdf5"),
             monitor='val_loss', mode='auto', save_freq='epoch', save_best_only=save_best_only),
         EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
-                      restore_best_weights=True)
+                      restore_best_weights=True, baseline=0.3)
     ], epochs=epoch, verbose=verbose)
     model.save(os.path.join(model_path, "saved_checkpoints", f"weights-{epoch:03d}.hdf5"))
     # plot the history
@@ -163,6 +163,8 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 for m_index, model_selected in enumerate(models_list):
                     model = load_check_point(os.path.join(base_path, "saved_checkpoints", model_selected))
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
+                    if len(y.shape) > 1:
+                        y = y.squeeze(-1)
                     pd.DataFrame({"Predicted": pred, "Actual": y}).to_csv(
                         os.path.join(saved_model_base_path, "PredictedvsActualCSV",
                                      f"{model.name}_{r_index}_{m_index}_pred.csv"))
