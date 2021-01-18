@@ -83,7 +83,7 @@ if config["train"]:
                     sys.exit()
             try:
                 x_all, y_all = load_data(glacier_name, logger=logger, **path_dict)
-                target_shape = 1 if len(y_all.shape) == 1 else y_all.shape[1]
+                target_shape = 1
                 if config["combine"]:
                     test_size = int(len(y_all) / 3) % 7
                     if first:

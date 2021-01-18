@@ -29,8 +29,7 @@ def transfer_learning(path, epoch, data, config, loss='mse', optimizer='rmsprop'
     if len(name) > 0:
         model._name += ("_" + name)
     train_model(model, epoch, data, config, loss=loss, optimizer=optimizer, save_best_only=save_best_only,
-                metrics=metrics,
-                show=show)
+                metrics=metrics, show=show)
 
 
 def concatenate_data(x1, y1, x2, y2):
@@ -64,13 +63,15 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
     logger.info(
         f"Compiled model: name: {model.name} epoch: {epoch} train size: {train_size} "
         f"test size: {test_size} optimizer: {optimizer}")
+    logger.info(model.summary())
     # add keras callbacks save history, tensorboard record and checkpoints
     history = model.fit(x_train, y_train, validation_data=(x_test, y_test), callbacks=[
         # TensorBoard(log_dir=os.path.join(model_path, "logs"), update_freq="epoch"),
         ModelCheckpoint(
             filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}-{val_loss:.2f}.hdf5"),
             monitor='val_loss', mode='auto', save_freq='epoch', save_best_only=save_best_only),
-        EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto')
+        EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
+                      restore_best_weights=True)
     ], epochs=epoch, verbose=verbose)
     # plot the history
     history_plot = plot_history(history.history, show=show)
