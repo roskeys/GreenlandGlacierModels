@@ -8,6 +8,8 @@ import argparse
 import importlib
 import traceback
 import pandas as pd
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from utils.generateReport import generate_report_md
 from utils.utils import train_model, load_all_and_plot_all, concatenate_data
 from utils.data import load_data, get_centroid, train_test_split, determine_path
@@ -87,14 +89,16 @@ if config["train"]:
                 if config["combine"]:
                     test_size = int(len(y_all) / 3) % 7
                     if first:
-                        (x_combine_train, x_combine_test, y_combine_train, y_combine_test) = train_test_split(x_all, y_all,
+                        (x_combine_train, x_combine_test, y_combine_train, y_combine_test) = train_test_split(x_all,
+                                                                                                              y_all,
                                                                                                               test_size=test_size)
                         first = False
                     else:
                         (x_train, x_test, y_train, y_test) = train_test_split(x_all, y_all, test_size=test_size)
                         x_combine_train, y_combine_train = concatenate_data(x_combine_train, y_combine_train, x_train,
                                                                             y_train)
-                        x_combine_test, y_combine_test = concatenate_data(x_combine_test, y_combine_test, x_test, y_test)
+                        x_combine_test, y_combine_test = concatenate_data(x_combine_test, y_combine_test, x_test,
+                                                                          y_test)
                     if glacier_name == config["glaciers"][-1]:
                         data = (x_combine_train, x_combine_test, y_combine_train, y_combine_test)
                         logger.info(f"Combined all data, train data size: {x_combine_train[0].shape[0]} "
@@ -111,8 +115,10 @@ if config["train"]:
                     (cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim, ocean_dim) = [
                         x.shape[1:] for x in data[0]]
                 else:
-                    (cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim) = [x.shape[1:] for
-                                                                                                             x in data[0]]
+                    (cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim) = [x.shape[1:]
+                                                                                                             for
+                                                                                                             x in
+                                                                                                             data[0]]
                     ocean_dim = None
             except ValueError as e:
                 if str(e) == "No enough data":
@@ -146,7 +152,7 @@ if config["train"]:
         sys.exit()
 
 if config["plot_all"]:
-    load_all_and_plot_all(config["saved_model_path"], logger=logger)
+    load_all_and_plot_all(config["saved_model_path"], logger=logger, last=False)
 
 if config["generate_report"]:
     generate_report_md(loss_evaluate_path="loss_evaluate.csv",

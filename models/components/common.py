@@ -48,7 +48,7 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
-    x = Dense(32, activation=relu)(x)
+    x = Dense(32, activation=tanh)(x)
     x = Dropout(0.5)(x)
     # output prediction
     pred = Dense(target_shape)(x)

@@ -73,17 +73,14 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
         EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
                       restore_best_weights=True)
     ], epochs=epoch, verbose=verbose)
+    model.save(os.path.join(model_path, "saved_checkpoints", f"weights-{epoch:03d}.hdf5"))
     # plot the history
     history_plot = plot_history(history.history, show=show)
     history_plot.savefig(os.path.join(model_path, f"{model_name}.loss.png"))
     history_plot.close()
     # select the last model
     selected_file = os.listdir(os.path.join(model_path, "saved_checkpoints"))
-    if len(selected_file) > 0:
-        selected_model = load_check_point(os.path.join(model_path, "saved_checkpoints", selected_file[-1]))
-    else:
-        model.save(os.path.join(model_path, "saved_checkpoints", f"weights-{epoch:03d}.hdf5"))
-        selected_model = model
+    selected_model = load_check_point(os.path.join(model_path, "saved_checkpoints", selected_file[-1]))
     # plot the predicted value with the actual value
     x_origin, y_origin = concatenate_data(x_train, y_train, x_test, y_test)
     pred, total_error, train_error, test_error = pred_and_evaluate(selected_model, x_origin, y_origin, test_size)
@@ -166,8 +163,7 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 for m_index, model_selected in enumerate(models_list):
                     model = load_check_point(os.path.join(base_path, "saved_checkpoints", model_selected))
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
-                    ly = y[:, 0] if len(y.shape) > 1 else y
-                    pd.DataFrame({"Predicted": pred, "Actual": ly}).to_csv(
+                    pd.DataFrame({"Predicted": pred, "Actual": y}).to_csv(
                         os.path.join(saved_model_base_path, "PredictedvsActualCSV",
                                      f"{model.name}_{r_index}_{m_index}_pred.csv"))
                     pred_and_actual_plot = plot_predicted(f"{model.name}_{r_index}_{m_index}", pred, y,
