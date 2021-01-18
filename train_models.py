@@ -134,9 +134,10 @@ if config["train"]:
                                         temperature_dim,
                                         ocean_dim=ocean_dim, target_shape=target_shape, other_dim=None,
                                         name=f"{name}.{glacier_name[:15]}")
-                train_model(model, config['epoch'], data=data, loss=config["loss"], optimizer=config["optimizer"],
-                            saved_model_path=config["saved_model_path"], save_best_only=config["save_best_only"],
-                            metrics=config["metrics"], show=config["show"], verbose=config["verbose"], logger=logger)
+                train_model(model, config['epoch'], data=data, loss=config["loss"], config=config,
+                            optimizer=config["optimizer"], saved_model_path=config["saved_model_path"],
+                            save_best_only=config["save_best_only"], metrics=config["metrics"], show=config["show"],
+                            verbose=config["verbose"], logger=logger)
             except:
                 logger.error(f"Failed to get model {model_name}")
                 traceback.print_exc()

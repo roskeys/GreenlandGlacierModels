@@ -45,7 +45,8 @@ def concatenate_data(x1, y1, x2, y2):
     return x_concatenated, y_concatenated
 
 
-def train_model(model, epoch, data, loss='mse', optimizer='rmsprop', saved_model_path="saved_models", metrics=None,
+def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', saved_model_path="saved_models",
+                metrics=None,
                 show=False, verbose=2, save_best_only=True, logger=None):
     # evaluation matrix
     model_name = model.name
@@ -71,7 +72,7 @@ def train_model(model, epoch, data, loss='mse', optimizer='rmsprop', saved_model
         ModelCheckpoint(
             filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}-{val_loss:.2f}.hdf5"),
             monitor='val_loss', mode='auto', save_freq='epoch', save_best_only=save_best_only),
-        EarlyStopping(monitor='val_loss', min_delta=1e-4, patience=20, mode='auto')
+        EarlyStopping(monitor='val_loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto')
     ], epochs=epoch, verbose=verbose)
     # plot the history
     history_plot = plot_history(history.history, show=show)
