@@ -4,6 +4,9 @@ import pandas as pd
 # from utils.utils import get_time_stamp
 def generate_report_md(loss_evaluate_path, image_path, top_n=5):
     loss_evaluate = pd.read_csv(loss_evaluate_path)
+    if len(loss_evaluate) == 0:
+        print("No evaluate result, report not generated!")
+        return
     loss_evaluate = get_best_of_each_model(loss_evaluate)
     report = "# Training Result\n\n"
     dataframes = (loss_evaluate[loss_evaluate["name"].str.contains("basic")],

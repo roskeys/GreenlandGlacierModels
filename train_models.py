@@ -76,6 +76,7 @@ if config["train"]:
                 }
             except FileNotFoundError as e:
                 if "data path not exists" in str(e):
+                    print(str(e))
                     continue
                 else:
                     traceback.print_exc()
