@@ -30,6 +30,11 @@ min_delta: 0.5
 patience: 200
 ## Early stopping min loss threshold
 threshold: 0.15
+# use PCA to reduce dimension
+use_pca: false
+# use mean, std, variance, 25%, 50%, 75%, min, max, count of examples around 10% of mean
+use_summary: true
+n: 5
 
 ## Data paths
 GLACIER_ASSIGNMENT_PATH: ../Training_data/Glaicer_select.csv
