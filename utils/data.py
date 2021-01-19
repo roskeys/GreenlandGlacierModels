@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from os.path import exists, join
+from scipy.stats import skew, kurtosis
+from sklearn.decomposition import PCA
 
 
 def get_year_range(dataframe):
@@ -147,7 +149,29 @@ def get_centroid(glacier_name, glacier_assignment):
         raise Exception(f"Central of {glacier_name} not found")
 
 
-def load_data(glacier_name, logger=None, **paths):
+def get_summary_array(array):
+    mean = np.expand_dims(array.mean(axis=1), axis=1)
+    return np.concatenate([
+        mean,
+        np.expand_dims(array.std(axis=1), axis=1),
+        np.expand_dims(array.var(axis=1), axis=1),
+        np.expand_dims(array.sum(axis=1), axis=1),
+        np.expand_dims(array.min(axis=1), axis=1),
+        np.expand_dims(array.max(axis=1), axis=1),
+        np.expand_dims(np.quantile(array, 0.25, axis=1), axis=1),
+        np.expand_dims(np.quantile(array, 0.5, axis=1), axis=1),
+        np.expand_dims(np.quantile(array, 0.75, axis=1), axis=1),
+        np.expand_dims((np.abs(array - mean) < (0.1 * mean)).sum(axis=1), axis=1)
+    ], axis=1)
+
+
+def get_pca(array, n=5):
+    return np.concatenate([
+        np.expand_dims(np.expand_dims(PCA(n_components=n).fit_transform(i.squeeze(-1).T).T, axis=0), axis=-1) for i in
+        array], axis=0)
+
+
+def load_data(glacier_name, logger=None, use_summary=False, use_pca=False, n=5, **paths):
     smb_df = pd.read_csv(paths["smb"])
     humidity_df = _load_csv_data(paths["humidity"])
     pressure_df = _load_csv_data(paths["pressure"])
@@ -170,6 +194,10 @@ def load_data(glacier_name, logger=None, **paths):
     else:
         smb_array = load_smb(smb_df, glacier_name, common_year_range)
         x_data_set = [_load_data(i, common_year_range) for i in dataframes[1:]]
+        if use_summary:
+            return [get_summary_array(i) if len(i.shape) == 4 else i for i in x_data_set], smb_array
+        elif use_pca:
+            return [get_pca(i, n=n) if len(i.shape) == 4 else i for i in x_data_set], smb_array
         return x_data_set, smb_array
 
 

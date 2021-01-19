@@ -91,7 +91,8 @@ if config["train"]:
                     traceback.print_exc()
                     sys.exit()
             try:
-                x_all, y_all = load_data(glacier_name, logger=logger, **path_dict)
+                x_all, y_all = load_data(glacier_name, logger=logger, use_summary=config["use_summary"],
+                                         use_pca=config["use_pca"], n=config["n"], **path_dict)
                 target_shape = 1
                 if config["combine"]:
                     test_size = int(len(y_all) / 3) % 7

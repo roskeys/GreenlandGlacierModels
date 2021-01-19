@@ -23,8 +23,7 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     x = Conv2D(16, kernel_size=(3, 3), padding='same', activation=linear)(x)
     x = AveragePooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x) if other_dim is None else flattenAll([x, other_in])
-    print(x.shape)
-    x = Dropout(128)
+
     # last stage processing
     x = expand_dims(x, -1)
     x = LSTM(64)(x)
