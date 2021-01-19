@@ -10,7 +10,8 @@ from models.components.common import getInput, flattenAll, getOutput, concatenat
 def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim,
              ocean_dim=None, other_dim=None, target_shape=1, name="resnetLSTM"):
     # input to the model
-    input_array = getInput(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim, ocean_dim)
+    input_array = getInput(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim,
+                           ocean_dim)
     if other_dim:
         other_in = Input(shape=other_dim, name="OtherParam")
         input_array.append(other_in)
@@ -29,9 +30,3 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)
     return m
-
-
-if __name__ == '__main__':
-    model = getModel([12], [12], [12], [41, 12, 1], [41, 12, 1], [41, 12, 1],
-                     ocean_dim=[8, 12])
-    model.compile(optimizer='rmsprop', loss="mse")

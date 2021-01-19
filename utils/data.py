@@ -129,7 +129,7 @@ def load_smb(smb_df, glacier_name, year_range):
     smb = []
     for year in year_range:
         smb.append(smb_df[f"{year + 1}.5"].values[0])
-    return np.array(smb)
+    return np.array(smb)[:, np.newaxis]
 
 
 def get_smb_year_range(smb_df):

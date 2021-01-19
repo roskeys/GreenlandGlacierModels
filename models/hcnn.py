@@ -27,14 +27,8 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         x = Flatten()(x1) if x1 is not None else Flatten()(x2)
 
     # last stage processing
-    x = Dense(64, activation=tanh)(x)
+    x = Dense(64)(x)
     x = Dropout(0.5)(x)
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)
     return m
-
-
-if __name__ == '__main__':
-    model = getModel([12], [12], [12], [41, 12, 1], [41, 12, 1], [41, 12, 1],
-                     ocean_dim=[8, 12, 1], other_dim=3)
-    model.compile(optimizer='rmsprop', loss="mse")
