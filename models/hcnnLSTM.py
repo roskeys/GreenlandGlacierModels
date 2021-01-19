@@ -28,7 +28,7 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         x = Flatten()(x1) if x1 is not None else Flatten()(x2)
 
     # last stage processing
-    x = expand_dims(x, 1)
+    x = expand_dims(x, -1)
     x = LSTM(64)(x)
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)

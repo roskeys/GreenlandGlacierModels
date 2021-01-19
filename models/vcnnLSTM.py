@@ -16,11 +16,11 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         input_array.append(other_in)
 
     # CNN
-    x = [AutoSetDenseOrCNN(i, horizontal=False, dropout=False, activation=linear, padding="valid") for i in input_array]
+    x = [AutoSetDenseOrCNN(i, horizontal=False, dropout=False, activation=relu, padding="valid") for i in input_array]
     x1 = concatenate_together(list(filter(lambda i: len(i.shape) == 4, x)), axis=1)
     x2 = concatenate_together(list(filter(lambda i: len(i.shape) != 4, x)), axis=1)
 
-    x1 = Conv2D(16, kernel_size=(1, 2), padding='same', activation=linear)(x1) if x1 is not None else None
+    x1 = Conv2D(16, kernel_size=(1, 2), padding='same', activation=relu)(x1) if x1 is not None else None
     x2 = Dense(x2.shape[1] * 2)(x2) if x2 is not None else None
     if x1 is not None and x2 is not None:
         x = flattenAll([x1, x2])

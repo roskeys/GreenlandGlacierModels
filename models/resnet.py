@@ -19,7 +19,7 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     for _ in range(8):
         x = ResidualBlock(x, filters=8, kernel_size=3, strides=(1, 1), padding='same', shortcut=True)
     x = AveragePooling2D(pool_size=(2, 2))(x)
-    x = Conv2D(16, kernel_size=(3, 3), padding='same', activation=tanh)(x)
+    x = Conv2D(16, kernel_size=(3, 3), padding='same', activation=relu)(x)
     x = AveragePooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x) if other_dim is None else flattenAll([x, other_in])
 
