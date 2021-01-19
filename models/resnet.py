@@ -24,7 +24,7 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     x = Flatten()(x) if other_dim is None else flattenAll([x, other_in])
     # last stage processing
     x = Dense(64)(x)
-    x = Dropout(0.5)(x)
+    x = Dropout(0.2)(x)
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)
     return m
