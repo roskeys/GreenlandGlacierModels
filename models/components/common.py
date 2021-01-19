@@ -19,12 +19,18 @@ def getInput(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     return input_array
 
 
-def AutoSetDenseOrCNN(x, horizontal=True, dropout=None, activation=relu, padding="valid", kernel_shape=None):
+def AutoSetDenseOrCNN(x, horizontal=True, dropout=None, stride=None, activation=relu, padding="valid", kernel_shape=None,
+                      pooling=None):
     shape = x.shape
     if len(shape) == 4:
         if kernel_shape is None:
             kernel_shape = (1, shape[2]) if horizontal else (shape[1], 1)
-        out = Conv2D(16, kernel_size=kernel_shape, padding=padding, activation=activation)(x)
+        if stride:
+            out = Conv2D(16, kernel_size=kernel_shape, padding=padding, activation=activation, strides=stride)(x)
+        else:
+            out = Conv2D(16, kernel_size=kernel_shape, padding=padding, activation=activation)(x)
+        if pooling:
+            out = pooling(out)
     else:
         flatten = Flatten()(x)
         out = Dense(shape[1] * 2)(flatten)
@@ -50,8 +56,8 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
-    x = Dense(32)(x)
-    x = Dropout(0.2)(x)
+    # x = Dense(32)(x)
+    # x = Dropout(0.2)(x)
     # output prediction
     pred = Dense(target_shape)(x)
     return pred

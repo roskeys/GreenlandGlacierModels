@@ -166,8 +166,8 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 if last:
                     models_list = models_list[-1:]
                 for m_index, model_selected in enumerate(models_list):
-                    # if int(model_selected[:-5].split('-')[-1]) < 50:
-                    #     continue
+                    if int(model_selected[:-5].split('-')[-1]) < 50:
+                        continue
                     model = load_check_point(os.path.join(base_path, "saved_checkpoints", model_selected))
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
                     if len(y.shape) > 1:

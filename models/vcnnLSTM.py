@@ -26,7 +26,8 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         x = flattenAll([x1, x2])
     else:
         x = Flatten()(x1) if x1 is not None else Flatten()(x2)
-
+    print(x.shape)
+    x = Dense(128)(x)
     # last stage processing
     x = expand_dims(x, -1)
     x = LSTM(64)(x)
