@@ -197,7 +197,7 @@ def load_data(glacier_name, logger=None, use_summary=False, use_pca=False, n=5, 
         if use_summary:
             return [get_summary_array(i) if len(i.shape) == 4 else i for i in x_data_set], smb_array
         elif use_pca:
-            return [get_pca(i, n=n) if len(i.shape) == 4 else i for i in x_data_set], smb_array
+            return [get_pca(i, n=n) if (len(i.shape) == 4) and (i.shape[1] >= n) else i for i in x_data_set], smb_array
         return x_data_set, smb_array
 
 

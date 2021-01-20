@@ -1,7 +1,7 @@
 from tensorflow import expand_dims
 from tensorflow.keras import Model
 from tensorflow.keras import Input
-from tensorflow.keras.activations import tanh, linear
+from tensorflow.keras.activations import relu
 from models.components.ResNet import ResidualBlock
 from tensorflow.keras.layers import Dropout, AveragePooling2D, Conv2D, Flatten, LSTM
 from models.components.common import getInput, flattenAll, getOutput, concatenate_together, expandForCNN

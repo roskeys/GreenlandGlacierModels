@@ -1,6 +1,6 @@
 from tensorflow.keras import Model
 from tensorflow.keras import Input
-from tensorflow.keras.activations import tanh
+from tensorflow.keras.activations import tanh, relu
 from models.components.ResNet import ResidualBlock
 from tensorflow.keras.layers import Dense, Dropout, AveragePooling2D, Conv2D, Flatten
 from models.components.common import getInput, flattenAll, getOutput, concatenate_together, expandForCNN
