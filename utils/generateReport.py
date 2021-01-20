@@ -1,9 +1,10 @@
+import os
 import pandas as pd
 
 
 # from utils.utils import get_time_stamp
-def generate_report_md(loss_evaluate_path, image_path, top_n=5):
-    loss_evaluate = pd.read_csv(loss_evaluate_path)
+def generate_report_md(loss_evaluate_path, image_path, base_path, top_n=5):
+    loss_evaluate = pd.read_csv(os.path.join(base_path, loss_evaluate_path))
     if len(loss_evaluate) == 0:
         print("No evaluate result, report not generated!")
         return
@@ -17,7 +18,7 @@ def generate_report_md(loss_evaluate_path, image_path, top_n=5):
             report += get_model_report_for_category(df, image_path, top_n)
     report += statistics_for_each_model(loss_evaluate)
     report += get_the_best_model_for_each_glacier(loss_evaluate, image_path, top_n)
-    with open("Report.md", 'w') as f:
+    with open(os.path.join(base_path, "Report.md"), 'w') as f:
         f.write(report)
 
 

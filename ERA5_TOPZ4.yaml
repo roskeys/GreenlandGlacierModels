@@ -37,30 +37,30 @@ use_summary: false
 n: 8
 
 ## Data paths
-GLACIER_ASSIGNMENT_PATH: ../Training_data/Glaicer_select.csv
-SMB_PATH: ../Training_data/smb_mass_change.csv
+GLACIER_ASSIGNMENT_PATH: Training_data/Glaicer_select.csv
+SMB_PATH: Training_data/smb_mass_change.csv
 
 #################### ocean/reanalysis data path ####################
 # reanalysis data
-ocean_PATH: ../Training_data/Ocean_Temperature_5m_Reanalysis
+ocean_PATH: Training_data/Ocean_Temperature_5m_Reanalysis
 
 #################### precipitation data path ####################
-precipitation_PATH: ../Training_data/ECMWF_reanalysis_data
+precipitation_PATH: Training_data/ECMWF_reanalysis_data
 
 #################### cloud data path ####################
-cloud_PATH: ../Training_data/ECMWF_reanalysis_data
+cloud_PATH: Training_data/ECMWF_reanalysis_data
 
 #################### wind data path ####################
-wind_PATH: ../Training_data/ECMWF_reanalysis_data
+wind_PATH: Training_data/ECMWF_reanalysis_data
 
 #################### humidity data path ####################
-humidity_PATH: ../Training_data/IGRA Archieves
+humidity_PATH: Training_data/IGRA Archieves
 
 #################### pressure data path ####################
-pressure_PATH: ../Training_data/ECMWF_reanalysis_data
+pressure_PATH: Training_data/ECMWF_reanalysis_data
 
 #################### temperature data path ####################
-temperature_PATH: ../Training_data/ECMWF_reanalysis_data
+temperature_PATH: Training_data/ECMWF_reanalysis_data
 
 centroid_map:
   1: DANMARKSHAVN

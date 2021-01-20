@@ -14,21 +14,6 @@ from utils.generateReport import generate_report_md
 from utils.utils import train_model, load_all_and_plot_all, concatenate_data
 from utils.data import load_data, get_centroid, train_test_split, determine_path
 
-sys.path.insert(0, "models")
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)15s %(levelname)5s: %(message)s')
-
-stream = logging.StreamHandler()
-stream.setLevel(logging.INFO)
-stream.setFormatter(formatter)
-logger.addHandler(stream)
-
-handler = logging.FileHandler(f"logs/GlacierModel-{time.strftime('%d-%H-%M-%S', time.localtime(time.time()))}.log")
-handler.setLevel(logging.INFO)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
 if os.name == "posix":
     default_config_path = "config.yaml"
 else:
@@ -40,6 +25,25 @@ args = parser.parse_args()
 
 with open(args.c, "rb") as f:
     config = yaml.safe_load(f)
+
+if not os.path.exists(f"{config['saved_model_path']}/logs"):
+    os.makedirs(f"{config['saved_model_path']}/logs")
+
+sys.path.insert(0, "models")
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)15s %(levelname)5s: %(message)s')
+
+stream = logging.StreamHandler()
+stream.setLevel(logging.INFO)
+stream.setFormatter(formatter)
+logger.addHandler(stream)
+
+handler = logging.FileHandler(
+    f"{config['saved_model_path']}/logs/GlacierModel-{time.strftime('%d-%H-%M-%S', time.localtime(time.time()))}.log")
+handler.setLevel(logging.INFO)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 glacier_assignment = pd.read_csv(config["GLACIER_ASSIGNMENT_PATH"])
 
@@ -165,4 +169,5 @@ if config["plot_all"]:
 
 if config["generate_report"]:
     generate_report_md(loss_evaluate_path="loss_evaluate.csv",
-                       image_path=f"{config['saved_model_path']}/PredictedvsActual", top_n=5)
+                       image_path=f"{config['saved_model_path']}/PredictedvsActual",
+                       base_path=config["saved_model_path"], top_n=5)

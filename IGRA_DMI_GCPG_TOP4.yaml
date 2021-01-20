@@ -37,35 +37,35 @@ use_summary: false
 n: 8
 
 ## Data paths
-GLACIER_ASSIGNMENT_PATH: ../Training_data/Glaicer_select.csv
-SMB_PATH: ../Training_data/smb_mass_change.csv
+GLACIER_ASSIGNMENT_PATH: Training_data/Glaicer_select.csv
+SMB_PATH: Training_data/smb_mass_change.csv
 
 #################### ocean/reanalysis data path ####################
 # reanalysis data
-ocean_PATH: ../Training_data/Ocean_Temperature_5m_Reanalysis
+ocean_PATH: Training_data/Ocean_Temperature_5m_Reanalysis
 
 #################### precipitation data path ####################
 # GPCP_precipitation
-precipitation_PATH: ../Training_data/GPCP_precipitation/
+precipitation_PATH: Training_data/GPCP_precipitation/
 
 #################### cloud data path ####################
 # DMI cloud data path
-cloud_PATH: ../Training_data/DMI_data/
+cloud_PATH: Training_data/DMI_data/
 
 #################### wind data path ####################
-wind_PATH: ../Training_data/DMI_data/
+wind_PATH: Training_data/DMI_data/
 
 #################### humidity data path ####################
 # IGRA humidity data path
-humidity_PATH: ../Training_data/IGRA Archieves
+humidity_PATH: Training_data/IGRA Archieves
 
 #################### pressure data path ####################
 # IGRA pressure data path
-pressure_PATH: ../Training_data/IGRA Archieves
+pressure_PATH: Training_data/IGRA Archieves
 
 #################### temperature data path ####################
 # IGRA temperature data path
-temperature_PATH: ../Training_data/IGRA Archieves
+temperature_PATH: Training_data/IGRA Archieves
 
 centroid_map:
   1: DANMARKSHAVN

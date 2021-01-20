@@ -151,6 +151,12 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
         os.makedirs(os.path.join(saved_model_base_path, "PredictedvsActual"))
     if "PredictedvsActualCSV" in model_folders:
         model_folders.remove("PredictedvsActualCSV")
+    if "loss_evaluate.csv" in model_folders:
+        model_folders.remove("loss_evaluate.csv")
+    if "Report.md" in model_folders:
+        model_folders.remove("Report.md")
+    if "logs" in model_folders:
+        model_folders.remove("logs")
     if not os.path.exists(os.path.join(saved_model_base_path, "PredictedvsActualCSV")):
         os.makedirs(os.path.join(saved_model_base_path, "PredictedvsActualCSV"))
     loss_evaluate = pd.DataFrame()
@@ -199,5 +205,5 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 history_plot.savefig(os.path.join(saved_model_base_path, "loss",
                                                   f"{model_name}_loss.png"))
                 history_plot.close()
-    loss_evaluate.to_csv("loss_evaluate.csv")
+    loss_evaluate.to_csv(os.path.join(saved_model_base_path, "loss_evaluate.csv"))
     logger.info(f"Finished plot and evaluate all models in {saved_model_base_path}")
