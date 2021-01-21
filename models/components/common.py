@@ -33,7 +33,7 @@ def AutoSetDenseOrCNN(x, horizontal=True, dropout=None, stride=None, activation=
             out = pooling(out)
     else:
         flatten = Flatten()(x)
-        out = Dense(shape[1] * 2)(flatten)
+        out = Dense(shape[1] * 2, activation=activation)(flatten)
         if Dropout:
             out = Dropout(dropout)(out)
     return out
@@ -56,9 +56,6 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
-    x = LeakyReLU()(x)
-    # x = Dense(32)(x)
-    # x = Dropout(0.2)(x)
     # output prediction
     pred = Dense(target_shape)(x)
     return pred

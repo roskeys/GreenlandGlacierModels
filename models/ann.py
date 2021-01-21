@@ -1,8 +1,8 @@
 from tensorflow.keras import Model
 from tensorflow.keras import Input
-from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
-from tensorflow.keras.activations import tanh, relu
-from models.components.common import getInput, flattenAll, getOutput
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.activations import tanh
+from models.components.common import getInput, flattenAll, getOutput, LeakyReLU
 
 
 def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim,
@@ -15,12 +15,14 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         input_array.append(other_in)
     # flatten all data and concatenate together
     x = flattenAll(input_array)
-    x = Dense(128)(x)
+    x = Dense(128, activation=tanh)(x)
     x = Dropout(0.2)(x)
 
     # last stage processing
     x = Dense(64)(x)
+    x = LeakyReLU()(x)
     x = Dropout(0.2)(x)
+
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)
     return m
