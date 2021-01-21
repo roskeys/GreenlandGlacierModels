@@ -1,7 +1,7 @@
 from tensorflow import expand_dims
 from tensorflow.keras import Input
 from tensorflow.keras.activations import relu, tanh
-from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, Concatenate
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, Concatenate, LeakyReLU
 
 
 def getInput(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim,
@@ -56,6 +56,7 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
+    x = LeakyReLU()(x)
     # x = Dense(32)(x)
     # x = Dropout(0.2)(x)
     # output prediction
