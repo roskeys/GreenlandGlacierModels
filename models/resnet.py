@@ -15,7 +15,7 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         other_in = Input(shape=other_dim, name="OtherParam")
         input_array.append(other_in)
 
-    x = concatenate_together([expandForCNN(i) for i in input_array[:-1]])
+    x = concatenate_together([expandForCNN(i) for i in input_array])
     for _ in range(8):
         x = ResidualBlock(x, filters=8, kernel_size=3, strides=(1, 1), padding='same', shortcut=True)
     x = AveragePooling2D(pool_size=(2, 2))(x)
