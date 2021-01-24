@@ -59,7 +59,7 @@ for glacier in glaciers:
     for index, dataset_name in enumerate(datasets, 0):
         selected = dataframe[dataframe['dataset'] == dataset_name]
         row, col = int(index / 2), index % 2
-        axs[index].set_title(dataset_name)
+        axs[index].set_title(f"{index + 1}: {dataset_name}")
         first = True
         for model in models:
             file_names = selected[selected['name'].str.contains(f"\.{model}\.")]['name'].values
@@ -93,10 +93,46 @@ for glacier in glaciers:
     plt.close()
 
 # models = ['vcnn', 'hcnn', 'resnet']
+## by dataset
+glacier_map = pd.read_csv("Training_data/Glacier_map.csv")
+glaciers = ['QAJUUTTAP_SERMIA', 'STORSTROMMEN', 'HELHEIMGLETSCHER', 'DAUGAARD-JENSEN']
+slr_map = {}
+for glacier in glaciers:
+    slr_map[glacier] = glacier_map[glacier_map['NAME'] == glacier]['mm SLR'].values[0]
+x = np.arange(len(models))
+fig = plt.figure(figsize=(16, 12))
+plt.title("Training mse and Test mse", fontsize=25, pad=20)
+plt.axis('off')
+ax = [p1, p2, p3, p4, p5] = fig.add_subplot(321), fig.add_subplot(322), fig.add_subplot(323), fig.add_subplot(
+    324), fig.add_subplot(325)
+for index, dataset_name in enumerate(datasets):
+    dataset_df = combined_output[combined_output['dataset'] == dataset_name]
+    training_loss, test_loss = [], []
+    for model in models:
+        model_df = dataset_df[dataset_df['name'].str.contains(f'\.{model}\.')]
+        train, test = [], []
+        for glacier in glaciers:
+            glacier_df = model_df[model_df['name'].str.contains(glacier[:10])]
+            train.append(glacier_df['Training_loss'] / slr_map[glacier])
+            test.append(glacier_df['Test_loss'] / slr_map[glacier])
+        training_loss.append(np.array(train).mean())
+        test_loss.append(np.array(test).mean())
+
+    ax[index].set_title(f"{index + 1}: {dataset_name}", fontsize=15)
+    l0 = ax[index].bar(x=x, height=training_loss, tick_label=models, width=0.3)
+    l1 = ax[index].bar(x=x + 0.3, height=test_loss, tick_label=models, width=0.3)
+    ax[index].set_xticks(x + 0.15)
+    ax[index].set_xticklabels(models)
+plt.legend((l0[0], l1[1]), ("Training MSE", "Test MSE"), bbox_to_anchor=(2.2, 3.6))
+plt.savefig(f"result/TrainingLossvsTestingLossSLR.png")
+plt.close()
+
+
+# by glacier
 x = np.arange(len(models))
 for dataset_name in datasets:
-    fig = plt.figure(figsize=(16, 12))
-    plt.title("Training mse and Test mse", fontsize=25, pad=20)
+    fig = plt.figure(figsize=(32, 24))
+    plt.title("Training mse and Test mse", fontsize=50, pad=50)
     plt.axis('off')
     ax = [p1, p2, p3, p4, p5] = fig.add_subplot(321), fig.add_subplot(322), fig.add_subplot(323), fig.add_subplot(
         324), fig.add_subplot(325)  # , fig.add_subplot(326)
@@ -109,7 +145,7 @@ for dataset_name in datasets:
             model_df = glacier_df[glacier_df['name'].str.contains(model)]
             training_loss.append(model_df['Training_loss'].mean(skipna=True))
             test_loss.append(model_df['Test_loss'].mean(skipna=True))
-        ax[index].set_title(glacier)
+        ax[index].set_title(glacier, fontsize=30)
         l0 = ax[index].bar(x=x, height=training_loss, tick_label=models, width=0.3)
         l1 = ax[index].bar(x=x + 0.3, height=test_loss, tick_label=models, width=0.3)
         ax[index].set_xticks(x + 0.15)
