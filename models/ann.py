@@ -15,11 +15,12 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
         input_array.append(other_in)
     # flatten all data and concatenate together
     x = flattenAll(input_array)
-    x = Dense(128, activation=tanh)(x)
-    x = Dropout(0.2)(x)
+    x = Dense(512, activation=tanh)(x)
 
+    x = Dense(256, activation=tanh)(x)
+    x = Dropout(0.2)(x)
     # last stage processing
-    x = Dense(64)(x)
+    x = Dense(128)(x)
     x = LeakyReLU()(x)
     x = Dropout(0.2)(x)
 

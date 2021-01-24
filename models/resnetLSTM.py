@@ -1,9 +1,9 @@
 from tensorflow import expand_dims
 from tensorflow.keras import Model
 from tensorflow.keras import Input
-from tensorflow.keras.activations import relu
+from tensorflow.keras.activations import relu, tanh
 from models.components.ResNet import ResidualBlock
-from tensorflow.keras.layers import Dropout, MaxPooling2D, Conv2D, Flatten, LSTM
+from tensorflow.keras.layers import Dropout, MaxPooling2D, Conv2D, Flatten, LSTM, Dense
 from models.components.common import getInput, flattenAll, getOutput, concatenate_together, expandForCNN
 
 
@@ -24,9 +24,11 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x) if other_dim is None else flattenAll([x, other_in])
 
+    x = Dense(256, activation=tanh)(x)
+    x = Dropout(0.2)(x)
     # last stage processing
     x = expand_dims(x, -1)
-    x = LSTM(64)(x)
+    x = LSTM(128)(x)
     x = Dropout(0.2)(x)
 
     pred = getOutput(x, target_shape)

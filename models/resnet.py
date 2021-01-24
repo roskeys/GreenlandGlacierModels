@@ -1,6 +1,6 @@
 from tensorflow.keras import Model
 from tensorflow.keras import Input
-from tensorflow.keras.activations import relu
+from tensorflow.keras.activations import relu, tanh
 from models.components.ResNet import ResidualBlock
 from tensorflow.keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, LeakyReLU
 from models.components.common import getInput, flattenAll, getOutput, concatenate_together, expandForCNN
@@ -23,8 +23,10 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     x = MaxPooling2D(pool_size=(2, 2))(x)
     x = Flatten()(x) if other_dim is None else flattenAll([x, other_in])
 
+    x = Dense(256, activation=tanh)(x)
+    x = Dropout(0.2)(x)
     # last stage processing
-    x = Dense(64)(x)
+    x = Dense(128)(x)
     x = LeakyReLU()(x)
     x = Dropout(0.2)(x)
 

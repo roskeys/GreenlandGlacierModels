@@ -1,8 +1,8 @@
 from tensorflow import expand_dims
 from tensorflow.keras import Model
 from tensorflow.keras import Input
-from tensorflow.keras.activations import relu
-from tensorflow.keras.layers import Dense, Conv2D, LSTM, Flatten, MaxPooling2D
+from tensorflow.keras.activations import relu, tanh
+from tensorflow.keras.layers import Dense, Conv2D, LSTM, Flatten, MaxPooling2D, Dropout
 from models.components.common import AutoSetDenseOrCNN, getInput, flattenAll, getOutput, concatenate_together
 
 
@@ -28,9 +28,11 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     else:
         x = Flatten()(x1) if x1 is not None else Flatten()(x2)
 
+    x = Dense(256, activation=tanh)(x)
+    x = Dropout(0.2)(x)
     # last stage processing
     x = expand_dims(x, -1)
-    x = LSTM(64)(x)
+    x = LSTM(128)(x)
 
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)

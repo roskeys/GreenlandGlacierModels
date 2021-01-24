@@ -3,7 +3,7 @@ train: true
 ## Plot all saved models or not
 plot_all: true
 ## Automatically generate markdown report
-generate_report: true
+generate_report: false
 ## training epoch
 epoch: 2000
 ## Training loss function
@@ -76,9 +76,8 @@ centroid_map:
 
 ## Glaciers selected to train
 glaciers:
-#  - JAKOBSHAVN_ISBRAE
-#  - NORDENSKIOLD_GLETSCHER
-#  - QAJUUTTAP_SERMIA
-#  - STORSTROMMEN
+  - JAKOBSHAVN_ISBRAE
+  - QAJUUTTAP_SERMIA
+  - STORSTROMMEN
   - HELHEIMGLETSCHER
   - DAUGAARD-JENSEN

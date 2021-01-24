@@ -56,6 +56,7 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
+    x = Dense(64, activation=tanh)(x)
     # output prediction
     pred = Dense(target_shape)(x)
     return pred
