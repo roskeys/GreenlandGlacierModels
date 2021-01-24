@@ -15,7 +15,7 @@ metrics: null
 ## Training optimizer
 optimizer: rmsprop
 ## Save the current best models
-save_best_only: true
+save_best_only: false
 ## Train all the models in the models directory or only listed models
 models: all
 ## show training process or not
@@ -27,9 +27,9 @@ combine: false
 ## Early stopping minimum delta
 min_delta: 0.5
 ## Early stopping waiting epoches
-patience: 200
+patience: 1000
 ## Early stopping min loss threshold
-threshold: 0.15
+threshold: 0.5
 # use PCA to reduce dimension
 use_pca: false
 # use mean, std, variance, 25%, 50%, 75%, min, max, count of examples around 10% of mean
