@@ -71,7 +71,7 @@ def train_model(model, epoch, data, config, loss='mse', optimizer='rmsprop', sav
         ModelCheckpoint(
             filepath=os.path.join(model_path, "saved_checkpoints", "weights-{epoch:03d}.hdf5"),
             monitor='val_loss', mode='auto', save_freq=10, save_best_only=save_best_only),
-        EarlyStopping(monitor='loss', min_delta=config["min_delta"], patience=config["patience"], mode='auto',
+        EarlyStopping(monitor='loss', min_delta=config["min_delta"], patience=config["patience"],
                       baseline=config["threshold"])
     ], epochs=epoch, verbose=verbose)
     model.save(os.path.join(model_path, "saved_checkpoints", f"weights-{epoch}.hdf5"))

@@ -25,7 +25,7 @@ saved_model_path: IGRA_DMI_GCPG_SST
 ## combine the training data together to train instead of data of single glacier
 combine: false
 ## Early stopping minimum delta
-min_delta: 0.5
+min_delta: 0.01
 ## Early stopping waiting epoches
 patience: 1000
 ## Early stopping min loss threshold
