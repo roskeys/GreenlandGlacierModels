@@ -53,6 +53,8 @@ if config["models"][0] == "all":
     models_files = os.listdir("models")
     models_files.remove("components")
     models_files.remove("__init__.py")
+    models_files.remove("filter")
+    models_files.remove("predictor")
     if "__pycache__" in models_files:
         models_files.remove("__pycache__")
     models = [n[:-3] for n in models_files]
