@@ -19,7 +19,8 @@ def getInput(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     return input_array
 
 
-def AutoSetDenseOrCNN(x, horizontal=True, dropout=None, stride=None, activation=relu, padding="valid", kernel_shape=None,
+def AutoSetDenseOrCNN(x, horizontal=True, dropout=None, stride=None, activation=relu, padding="valid",
+                      kernel_shape=None,
                       pooling=None):
     shape = x.shape
     if len(shape) == 4:
@@ -56,7 +57,7 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
-    x = Dense(64, activation=tanh)(x)
+    x = LeakyReLU()(Dense(64)(x))
     # output prediction
     pred = Dense(target_shape)(x)
     return pred

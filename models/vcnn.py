@@ -27,13 +27,11 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
     else:
         x = Flatten()(x1) if x1 is not None else Flatten()(x2)
 
-    x = Dense(256, activation=tanh)(x)
-    x = Dropout(0.2)(x)
-    # last stage processing
-    x = Dense(128)(x)
-    x = LeakyReLU()(x)
-    x = Dropout(0.2)(x)
+    # unify output layer
+    x = Dense(256, activation=relu)(x)
 
+    # last stage processing
+    x = LeakyReLU()(Dense(128)(x))
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)
     return m
