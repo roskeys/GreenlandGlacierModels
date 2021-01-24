@@ -172,14 +172,12 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                 if last:
                     models_list = models_list[-1:]
                 for m_index, model_selected in enumerate(models_list):
-                    if int(model_selected[:-5].split('-')[-1]) < 50:
+                    if int(model_selected[:-5].split('-')[-1]) < 30:
                         continue
                     model = load_check_point(os.path.join(base_path, "saved_checkpoints", model_selected))
                     pred, total_error, train_error, test_error = pred_and_evaluate(model, x, y, test_size)
                     if len(y.shape) > 1:
                         y = y.squeeze(-1)
-                    diff = pred - y
-                    train_diff, test_diff = diff[:-test_size], diff[-test_size:]
                     pd.DataFrame({"Predicted": pred, "Actual": y}).to_csv(
                         os.path.join(saved_model_base_path, "PredictedvsActualCSV",
                                      f"{model.name}_{r_index}_{m_index}_pred.csv"))
@@ -192,9 +190,6 @@ def load_all_and_plot_all(saved_model_base_path, last=True, show=False, logger=N
                     df = pd.DataFrame({
                         "name": [f"{model.name}_{r_index}_{m_index}"],
                         "Total_loss": [total_error], "Test_loss": [test_error], "Training_loss": [train_error],
-                        "r2_score": [r2_score(diff, np.zeros(len(diff)))],
-                        "Test_r2": [r2_score(test_diff, np.zeros(test_size))],
-                        "Training_r2": [r2_score(train_diff, np.zeros(len(diff) - test_size))],
                         "path": [os.path.join(base_path, "saved_checkpoints", model_selected)]
                     })
                     loss_evaluate = pd.concat([loss_evaluate, df], ignore_index=True)
