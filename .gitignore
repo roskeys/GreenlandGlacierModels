@@ -1,4 +1,5 @@
 Training_data/
+result/
 __pycache__/
 saved_models/
 logs/

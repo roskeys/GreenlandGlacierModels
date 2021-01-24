@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import pandas as pd
-from shutil import copyfile
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
