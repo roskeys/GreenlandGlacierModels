@@ -33,3 +33,9 @@ def getCNNFilter(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_
     # unify output layer
     out = Dense(target_shape, activation=relu)(x)
     return Model(inputs=input_array, outputs=out, name=name)
+
+if __name__ == '__main__':
+    filter = getCNNFilter(cloud_dim=(12,), pressure_dim=(12,), wind_dim=(12,), humidity_dim=(41, 12),
+                          precipitation_dim=(41, 12), temperature_dim=(32, 12), ocean_dim=(128, 12), horizontal=True)
+    filter.compile()
+    print(filter.summary())

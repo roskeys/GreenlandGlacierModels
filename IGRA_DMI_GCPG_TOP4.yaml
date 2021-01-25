@@ -61,7 +61,7 @@ humidity_PATH: Training_data/IGRA Archieves
 
 #################### pressure data path ####################
 # IGRA pressure data path
-pressure_PATH: Training_data/IGRA ArchievesC
+pressure_PATH: Training_data/IGRA Archieves
 
 #################### temperature data path ####################
 # IGRA temperature data path
