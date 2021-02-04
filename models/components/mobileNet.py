@@ -2,7 +2,7 @@ from tensorflow.keras import Model
 from tensorflow.keras import Input
 from tensorflow.keras.activations import relu, tanh
 from models.components.ResNet import ResidualBlock
-from tensorflow.keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, LeakyReLU, BatchNormalization, add
+from tensorflow.keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, LeakyReLU, BatchNormalization, add, ReLU
 from models.components.common import getInput, flattenAll, getOutput, concatenate_together, expandForCNN
 
 
