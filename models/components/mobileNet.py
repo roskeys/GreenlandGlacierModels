@@ -2,11 +2,12 @@ from tensorflow.keras import Model
 from tensorflow.keras import Input
 from tensorflow.keras.activations import relu, tanh
 from models.components.ResNet import ResidualBlock
-from tensorflow.keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, LeakyReLU, BatchNormalization, add, ReLU
+from tensorflow.keras.layers import Dense, Dropout, Conv2D, Flatten, MaxPooling2D, LeakyReLU, BatchNormalization, add, \
+    ReLU
 from models.components.common import getInput, flattenAll, getOutput, concatenate_together, expandForCNN
 
 
-def dsConv2D(model, in_channel, out_channel, kernel_size, strides, padding = "valid"):
+def dsConv2D(model, in_channel, out_channel, kernel_size, strides, padding="valid"):
     """
     Depthwise Convolution 2D block
     args:
@@ -20,25 +21,26 @@ def dsConv2D(model, in_channel, out_channel, kernel_size, strides, padding = "va
     returns the model with dsConv2D layers added
     """
     # Depthwise
-    block = Conv2D(filters = in_channel,
-                   kernel_size = kernel_size,
-                   strides = strides,
-                   padding = padding,
-                   groups = in_channel,
-                   use_bias = False)(model)
-    block = BatchNormalization(axis = 3)(block)
+    block = Conv2D(filters=in_channel,
+                   kernel_size=kernel_size,
+                   strides=strides,
+                   padding=padding,
+                   groups=in_channel,
+                   use_bias=False)(model)
+    block = BatchNormalization(axis=3)(block)
     block = ReLU()(block)
     # Pointwise
-    block = Conv2D(filters = out_channel,
-                   kernel_size = 1,
-                   strides = (1, 1),
-                   padding = "valid",
-                   use_bias = False)(block)
-    block = BatchNormalization(axis = 3)(block)
-    block = ReLU(block)
+    block = Conv2D(filters=out_channel,
+                   kernel_size=1,
+                   strides=(1, 1),
+                   padding="valid",
+                   use_bias=False)(block)
+    block = BatchNormalization(axis=3)(block)
+    block = ReLU()(block)
     return block
 
-def invertedResidualBlock(model, in_channel, out_channel, kernel_size, expansion_rate = 8, strides = (1, 1)):
+
+def invertedResidualBlock(model, in_channel, out_channel, kernel_size, expansion_rate=8, strides=(1, 1)):
     """
     Inverted Residual Block from Mobile Net V2
     args:
@@ -52,37 +54,38 @@ def invertedResidualBlock(model, in_channel, out_channel, kernel_size, expansion
     returns the model with inverted Redisual Block added
     """
     # Expansion layer
-    block = Conv2D(filters = in_channel * expansion_rate,
-                   kernel_size = 1,
-                   strides = (1, 1),
-                   use_bias = False)(model)
-    block = BatchNormalization(axis = 3)(block)
+    block = Conv2D(filters=in_channel * expansion_rate,
+                   kernel_size=1,
+                   strides=(1, 1),
+                   use_bias=False)(model)
+    block = BatchNormalization(axis=3)(block)
     block = ReLU()(block)
     # Depthwise Layer
-    block = Conv2D(filters = in_channel * expansion_rate,
-                   kernel_size = kernel_size,
-                   strides = strides,
-                   padding = "same",
-                   groups = in_channel * expansion_rate,
-                   use_bias = False)(block)
-    block = BatchNormalization(axis = 3)(block)
+    block = Conv2D(filters=in_channel * expansion_rate,
+                   kernel_size=kernel_size,
+                   strides=strides,
+                   padding="same",
+                   groups=in_channel * expansion_rate,
+                   use_bias=False)(block)
+    block = BatchNormalization(axis=3)(block)
     block = ReLU()(block)
     # Linear Bottleneck
-    block = Conv2D(filters = out_channel,
-                   kernel_size = 1,
-                   strides = (1, 1),
-                   use_bias = False
+    block = Conv2D(filters=out_channel,
+                   kernel_size=1,
+                   strides=(1, 1),
+                   use_bias=False
                    )(block)
-    block = BatchNormalization(axis = 3)(block)
+    block = BatchNormalization(axis=3)(block)
     # shortcut
     if in_channel == out_channel:
         block = add([model, block])
         return block
     else:
-        shortcut = Conv2D(filters = out_channel,
-                          kernel_size = 1,
-                          strides = (1, 1),
-                          padding = "valid",
-                          use_bias = False)(model)
-        shortcut = BatchNormalization(axis = 3)(shortcut)
+        shortcut = Conv2D(filters=out_channel,
+                          kernel_size=1,
+                          strides=(1, 1),
+                          padding="valid",
+                          use_bias=False)(model)
+        shortcut = BatchNormalization(axis=3)(shortcut)
         block = add([shortcut, block])
+        return block
