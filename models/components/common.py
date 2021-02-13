@@ -1,7 +1,7 @@
 from tensorflow import expand_dims
 from tensorflow.keras import Input
 from tensorflow.keras.activations import relu, tanh
-from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, Concatenate, LeakyReLU
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, Concatenate, LeakyReLU, BatchNormalization
 
 
 def getInput(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim, temperature_dim,
@@ -27,12 +27,15 @@ def AutoSetDenseOrCNN(x, horizontal=True, dropout=None, stride=None, activation=
         if kernel_shape is None:
             kernel_shape = (1, shape[2]) if horizontal else (shape[1], 1)
         if stride:
+            x = BatchNormalization()(x)
             out = Conv2D(16, kernel_size=kernel_shape, padding=padding, activation=activation, strides=stride)(x)
         else:
+            x = BatchNormalization()(x)
             out = Conv2D(16, kernel_size=kernel_shape, padding=padding, activation=activation)(x)
         if pooling:
             out = pooling(out)
     else:
+        x = BatchNormalization()(x)
         flatten = Flatten()(x)
         out = Dense(shape[1] * 2, activation=activation)(flatten)
         if Dropout:
@@ -57,6 +60,7 @@ def concatenate_together(x_list, axis=1):
 
 
 def getOutput(x, target_shape=1):
+    x = BatchNormalization()(x)
     x = Dense(64, activation=tanh)(x)
     # output prediction
     pred = Dense(target_shape)(x)

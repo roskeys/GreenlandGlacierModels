@@ -2,7 +2,7 @@ from tensorflow import expand_dims
 from tensorflow.keras import Model
 from tensorflow.keras import Input
 from tensorflow.keras.activations import relu, tanh
-from tensorflow.keras.layers import Dense, Conv2D, LSTM, Flatten, MaxPooling2D, Dropout
+from tensorflow.keras.layers import Dense, Conv2D, LSTM, Flatten, MaxPooling2D, Dropout, BatchNormalization
 from models.components.common import AutoSetDenseOrCNN, getInput, flattenAll, getOutput, concatenate_together
 
 
@@ -17,21 +17,24 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
 
     # CNN
     x = [AutoSetDenseOrCNN(i, horizontal=True, dropout=False, activation=relu, padding="valid") for i in input_array]
+    x = BatchNormalization()(x)
     x1 = concatenate_together(list(filter(lambda i: len(i.shape) == 4, x)), axis=1)
     x2 = concatenate_together(list(filter(lambda i: len(i.shape) != 4, x)), axis=1)
 
     x1 = MaxPooling2D(pool_size=(2, 1))(
-        Conv2D(16, kernel_size=(2, 1), padding='same', activation=relu)(x1)) if x1 is not None else None
-    x2 = Dense(x2.shape[1] * 2, activation=relu)(x2) if x2 is not None else None
+        Conv2D(16, kernel_size=(2, 1), padding='same', activation=relu)(BatchNormalization()(x1))) if x1 is not None else None
+    x2 = Dense(x2.shape[1] * 2, activation=relu)(BatchNormalization()(x2)) if x2 is not None else None
     if x1 is not None and x2 is not None:
         x = flattenAll([x1, x2])
     else:
         x = Flatten()(x1) if x1 is not None else Flatten()(x2)
 
     # unify output layer
+    x = BatchNormalization()(x)
     x = Dense(256, activation=relu)(x)
 
     # last stage processing
+    x = BatchNormalization()(x)
     x = LSTM(128)(expand_dims(x, -1))
     pred = getOutput(x, target_shape)
     m = Model(inputs=input_array, outputs=pred, name=name)

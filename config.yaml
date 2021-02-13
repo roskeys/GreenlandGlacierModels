@@ -17,7 +17,8 @@ optimizer: rmsprop
 ## Save the current best models
 save_best_only: true
 ## Train all the models in the models directory or only listed models
-models: mobileNet
+#models: mobileNet
+models: all
 ## show training process or not
 verbose: 1
 ## where to save the saved_models
