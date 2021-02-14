@@ -17,7 +17,6 @@ def getModel(cloud_dim, precipitation_dim, wind_dim, humidity_dim, pressure_dim,
 
     # CNN
     x = [AutoSetDenseOrCNN(i, horizontal=True, dropout=False, activation=relu, padding="valid") for i in input_array]
-    x = BatchNormalization()(x)
     x1 = concatenate_together(list(filter(lambda i: len(i.shape) == 4, x)), axis=1)
     x2 = concatenate_together(list(filter(lambda i: len(i.shape) != 4, x)), axis=1)
 
